@@ -5,19 +5,18 @@ import sys
 class Game_menu:
    
     def game_menu(self):
-        menu_items = ["Blackjack" , "War" , "Exit"]
-        menu = Menu(menu_items)
-        menu.display_menu()
+       
         while True:
+            menu_items = ["Blackjack" , "War" , "Exit"]
+            menu = Menu(menu_items)
+            menu.display_menu()
             choice = input("Which game would you like to play? ")
             if choice == "1":
                 BlackJack().blackjack()
                 self.end_game(1)
-                break
             elif choice == "2":
                 Game().war()
                 self.end_game(2)
-                break
             elif choice == "3":
                 sys.exit(0)
             else :

@@ -2,7 +2,7 @@ from card import Card
 from deck import Deck
 from color import Color
 class Dealer:
-    def __init__(self, deck, hand = [],score = 0, ace_score = 0):
+    def __init__(self, deck, hand ,score , ace_score):
         self.deck = deck
         self.hand = hand
         self.score = score

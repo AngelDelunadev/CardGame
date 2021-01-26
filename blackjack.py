@@ -6,6 +6,10 @@ from menu import Menu
 from color import Color
 class BlackJack:
     def blackjack(self):
+        
+        Color().color4("==========================\nBLACKJACK\n==========================")
+        print("")
+
         num_players = Validate().inter("How many players will there be? " , "Please only enter a number")
 
         count = 1
@@ -19,38 +23,52 @@ class BlackJack:
         
         deck = Deck().create_deck()
         deck = Deck().shuffle_deck(deck)
-        dealer = Dealer(deck)
+        dealer_hand = []
+        dealer = Dealer(deck,dealer_hand,0,0)
        
         BlackJack().deal(dealer,players)
       
         player21 = []
         winner = []
+        bust = 0
+        
+
         for player in players:
             if player.score > 21:
                 players.remove(player)
-            elif player.score == 21:
-                player21.append(player)
-            elif player.score < 21:
-                count = 0
-                highscore =0
+        for player in players:
+            if player.score > 21:
+                bust +=1
+                
+       
+        input("Press enter to start the Dealers turn")
+
+        if len(players) == 0 or bust > 0 :
+            Color().color4("All players busted , The dealer wins this game of Blackjack")
+        
+
+        else:
+            highscore = 0
+            for player in players:
+                if player.score == 21:
+                    player21.append(player)
+                elif player.score < 21:
+                    count = 0
                 while count < len(players):
                     if highscore < players[count].score:
                         highscore = players[count].score
                     count +=1
-                for player in players:
-                    if highscore == player.score:
-                        winner.append(player)
-        input("Press enter to start the Dealers turn")
+            for player in players:
+                if highscore == player.score:
+                    winner.append(player)
 
-        if len(players) == 0 :
-            Color().color4("All players busted , The dealer wins this game of Blackjack")
-        else:
+
             outcome = dealer.dealers_turn()
             if outcome == 1:
                 if len(player21) > 0:
                     for player in player21:
-                        print(f"{player.name} wins this game of Blackjack")
-                else:
+                        print(f"{player.name} got a Blackjack {player.name} wins this game of Blackjack")
+                elif len(player21)== 0:
                     for player in winner:
                         print(f"{player.name} is the closest to 21 with a hand of {player.score}")
                         print(f"{player.name} wins this game of Blackjack")
@@ -60,18 +78,22 @@ class BlackJack:
                 else:
                     for player in player21:
                         print(f"{player.name} has 21 as well so they tie with the dealer")
-            elif outcome == 3:
-                for player in winner:
-                    if player.score > dealer.score:
-                        print(f"{player.name} got closer to 21 then the dealer with a hand of {player.score}")
+            else:
+                if len(player21) > 0:
+                    for player in player21:
                         print(f"{player.name} wins this game of Blackjack")
-                    elif player.score == dealer.score:
-                        print(f"{player.name} had the same score as the dealer")
-                        Color().color2("This game is a tie")
-                    else:
-                        Color().color1(f"The dealer is the closest to 21 with a hand of {dealer.score}")
-                        Color().color1(f"The dealer wins this game of Blackjack")
- 
+                else:
+                    for player in winner:
+                        if player.score > dealer.score:
+                            print(f"{player.name} got closer to 21 then the dealer with a hand of {player.score}")
+                            print(f"{player.name} wins this game of Blackjack")
+                        elif player.score == dealer.score:
+                            print(f"{player.name} had the same score as the dealer")
+                            Color().color2("This game is a tie")
+                        else:
+                            Color().color1(f"The dealer is the closest to 21 with a hand of {dealer.score}")
+                            Color().color1(f"The dealer wins this game of Blackjack")
+    
 
     def deal(self,dealer,players):
         Color().color1(f"The dealer draws {dealer.deck[0].display_card()}for himself ")
@@ -92,6 +114,7 @@ class BlackJack:
             dealer.deck.remove(dealer.deck[0])
 
             BlackJack().card_check(dealer,player)
+            input("press enter to start the next players turn.")
        
 
     def card_check(self,dealer,player):
